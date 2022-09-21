@@ -1,0 +1,1 @@
+/Users/vntmams/Documents/AndroidProjects/FunkMe/buildSrc/build/classes/kotlin/main/Deps.class:/Users/vntmams/Documents/AndroidProjects/FunkMe/buildSrc/build/classes/kotlin/main/Versions.class

@@ -11,7 +11,7 @@ import com.scarpim.funkme.domain.model.FunkAudio
  */
 interface FunkAudioPlayer {
 
-    suspend fun prepare()
+    suspend fun prepare(): List<FunkAudio>
 
     fun play(audio: FunkAudio): Boolean
 

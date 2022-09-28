@@ -6,9 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -57,7 +58,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FunkPad(viewModel: MainViewModel) {
-    val audios = viewModel.getAudios()
+    val audios = viewModel.funkAudios
     val widthFraction = 1f / (audios.size / 3)
     CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
         LazyHorizontalGrid(
@@ -83,7 +84,6 @@ fun FunkPad(viewModel: MainViewModel) {
 
 @Composable
 fun FunkButton(audio: FunkAudio, widthFraction: Float, onClick: (Int, Boolean) -> Unit) {
-    var isPlaying by remember { mutableStateOf(false) }
     val infiniteTransition = rememberInfiniteTransition()
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -114,7 +114,7 @@ fun FunkButton(audio: FunkAudio, widthFraction: Float, onClick: (Int, Boolean) -
         FunkType.SOUND -> soundButtonColor
     }
 
-    val boxModifier = if (isPlaying) {
+    val boxModifier = if (audio.isPlaying) {
         Modifier.background(Color.White.copy(alpha = alpha))
     } else {
         Modifier
@@ -125,15 +125,14 @@ fun FunkButton(audio: FunkAudio, widthFraction: Float, onClick: (Int, Boolean) -
             .fillMaxHeight(COLUMN_HEIGHT_FRACTION),
         colors = ButtonDefaults.buttonColors(backgroundColor = color),
         onClick = {
-            Log.d("Marcos", "onClick - id = ${audio.id}, isPlaying = $isPlaying")
-            onClick(audio.id, isPlaying)
-            isPlaying = !isPlaying
+            Log.d("Marcos", "onClick - id = ${audio.id}, isPlaying = ${audio.isPlaying}")
+            onClick(audio.id, audio.isPlaying)
         }
     ) {
         Box(
             modifier = boxModifier.fillMaxSize()
         ) {
-            if (isPlaying) {
+            if (audio.isPlaying) {
                 Icon(
                     modifier = Modifier
                         .fillMaxSize()

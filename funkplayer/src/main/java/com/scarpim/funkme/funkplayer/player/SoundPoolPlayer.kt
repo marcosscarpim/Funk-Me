@@ -6,13 +6,14 @@ package com.scarpim.funkme.funkplayer.player
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.media.SoundPool
 import com.scarpim.funkme.domain.model.FunkType
 import com.scarpim.funkme.funkplayer.model.FunkAudio
 import com.scarpim.funkme.funkplayer.source.FunkAudioDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,9 +25,7 @@ class SoundPoolPlayer @Inject constructor(
     private lateinit var soundPool: SoundPool
     private val loadedAudios = mutableListOf<FunkAudio>()
 
-    val stateFlow = MutableStateFlow<Int>(0)
-
-    fun prepare() {
+    suspend fun prepare(): List<FunkAudio> = withContext(Dispatchers.IO) {
         val audios = FunkAudioDataSource.getAvailable()
         val attributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -40,8 +39,10 @@ class SoundPoolPlayer @Inject constructor(
 
         audios.forEach { audio ->
             val loadedId = soundPool.load(context, audio.file, 1)
-            loadedAudios.add(audio.copy(loadedId = loadedId))
+            val duration = getAudioDuration(audio)
+            loadedAudios.add(audio.copy(loadedId = loadedId, duration = duration))
         }
+        loadedAudios
     }
 
     fun play(audioId: Int) {
@@ -59,5 +60,10 @@ class SoundPoolPlayer @Inject constructor(
             soundPool.stop(it.streamId)
             it.streamId = -1
         }
+    }
+
+    private fun getAudioDuration(audio: FunkAudio): Int {
+        val player = MediaPlayer.create(context, audio.file)
+        return player.duration
     }
 }

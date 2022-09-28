@@ -14,5 +14,5 @@ class FunkAudioMapper @Inject constructor() {
         playerList.map(::toDomain)
 
     private fun toDomain(playerAudio: PlayerAudio): DomainAudio =
-        DomainAudio(playerAudio.id, playerAudio.type)
+        DomainAudio(playerAudio.id, playerAudio.type, playerAudio.duration)
 }

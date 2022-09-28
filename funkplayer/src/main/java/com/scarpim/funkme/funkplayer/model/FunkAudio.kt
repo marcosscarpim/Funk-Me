@@ -13,6 +13,7 @@ data class FunkAudio(
     val type: FunkType,
     val loadedId: Int = -1,
     var streamId: Int = -1,
+    val duration: Int = 0, // in ms
     var isPlaying: Boolean = false,
     val name: String = ""
 )

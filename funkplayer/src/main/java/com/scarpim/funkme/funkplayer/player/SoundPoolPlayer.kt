@@ -48,9 +48,12 @@ class SoundPoolPlayer @Inject constructor(
     fun play(audioId: Int) {
         val audio = loadedAudios.find { audioId == it.id }
         audio?.let {
-            val loop = if (it.type == FunkType.REPEAT) -1 else 0
-            val streamId = soundPool.play(it.loadedId, 1f, 1f, 0, loop, 1f)
-            it.streamId = streamId
+            if (it.type == FunkType.REPEAT) {
+                startAllRepeatableAtSameTime(it)
+            } else {
+                val streamId = soundPool.play(it.loadedId, 1f, 1f, 0, 0, 1f)
+                it.streamId = streamId
+            }
         }
     }
 
@@ -65,5 +68,18 @@ class SoundPoolPlayer @Inject constructor(
     private fun getAudioDuration(audio: FunkAudio): Int {
         val player = MediaPlayer.create(context, audio.file)
         return player.duration
+    }
+
+    private fun startAllRepeatableAtSameTime(audio: FunkAudio) {
+        val repeatables = loadedAudios.filter { it.streamId != -1 && it.type == FunkType.REPEAT }
+        repeatables.forEach {
+            soundPool.stop(it.streamId)
+        }
+        repeatables.forEach {
+            val streamId = soundPool.play(it.loadedId, 1f, 1f, 0, -1, 1f)
+            it.streamId = streamId
+        }
+        val streamId = soundPool.play(audio.loadedId, 1f, 1f, 0, -1, 1f)
+        audio.streamId = streamId
     }
 }

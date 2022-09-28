@@ -30,8 +30,8 @@ import com.scarpim.funkme.ui.theme.soundButtonColor
 import com.scarpim.funkme.ui.theme.voiceButtonColor
 import dagger.hilt.android.AndroidEntryPoint
 
-private val GRID_CELLS = 3
-private val COLUMN_HEIGHT_FRACTION = 1f / GRID_CELLS
+private const val GRID_CELLS = 3
+private const val COLUMN_HEIGHT_FRACTION = 1f / GRID_CELLS
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

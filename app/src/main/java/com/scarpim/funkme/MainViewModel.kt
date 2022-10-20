@@ -4,19 +4,19 @@
 
 package com.scarpim.funkme
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scarpim.funkme.domain.model.FunkAudio
-import com.scarpim.funkme.domain.model.FunkType
 import com.scarpim.funkme.domain.usecase.PlayAudio
 import com.scarpim.funkme.domain.usecase.PreparePlayer
 import com.scarpim.funkme.domain.usecase.StopAudio
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.concurrent.timerTask
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -29,6 +29,7 @@ class MainViewModel @Inject constructor(
 
     fun prepare() {
         viewModelScope.launch {
+            funkAudios.clear()
             funkAudios.addAll(preparePlayer())
         }
     }
@@ -37,17 +38,14 @@ class MainViewModel @Inject constructor(
         val audio = funkAudios.find { it.id == audioId }
         audio?.let {
             val audioIndex = funkAudios.indexOf(it)
-            playAudio(it)
-            funkAudios.removeAt(audioIndex)
-            funkAudios.add(audioIndex, it.copy(isPlaying = true))
-            if (it.type != FunkType.REPEAT) {
-                val timer = Timer()
-                val myTask = timerTask {
+            playAudio(it) { shouldFinish ->
+                if (shouldFinish) {
                     funkAudios.removeAt(audioIndex)
                     funkAudios.add(audioIndex, it.copy(isPlaying = false))
                 }
-                timer.schedule(myTask, it.duration.toLong())
             }
+            funkAudios.removeAt(audioIndex)
+            funkAudios.add(audioIndex, it.copy(isPlaying = true))
         }
     }
 
@@ -59,11 +57,5 @@ class MainViewModel @Inject constructor(
             funkAudios.removeAt(audioIndex)
             funkAudios.add(audioIndex, it.copy(isPlaying = false))
         }
-    }
-
-    private fun updateItemState(audio: FunkAudio, isPlaying: Boolean) {
-        val audioIndex = funkAudios.indexOf(audio)
-        funkAudios.removeAt(audioIndex)
-        funkAudios.add(audioIndex, audio.copy(isPlaying = isPlaying))
     }
 }

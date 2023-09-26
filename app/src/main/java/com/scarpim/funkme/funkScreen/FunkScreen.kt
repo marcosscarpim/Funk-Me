@@ -12,16 +12,16 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun FunkScreen(viewModel: FunkViewModel) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsState()
 
-    if (state is FunkScreenState.Loaded) {
+    if (state.isLoading) {
+        // TODO - Add some feedback for
+    } else {
         FunkPad(
             modifier = Modifier.fillMaxSize(),
-            audios = (state as FunkScreenState.Loaded).audios
+            audios = state.audios
         ) { audio ->
             viewModel.onAction(FunkScreenAction.AudioClicked(audio))
         }
-    } else {
-        // TODO - Add some feedback for user
     }
 }

@@ -4,7 +4,6 @@
 
 package com.scarpim.funkme.funkScreen
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scarpim.funkme.domain.model.FunkAudio
@@ -14,65 +13,81 @@ import com.scarpim.funkme.domain.usecase.StopAudio
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class FunkScreenState(
+    val isLoading: Boolean = false,
+    val audios: List<FunkAudio> = emptyList()
+)
 
 @HiltViewModel
 class FunkViewModel @Inject constructor(
     private val preparePlayer: PreparePlayer,
     private val playAudio: PlayAudio,
     private val stopAudio: StopAudio
-): ViewModel() {
+) : ViewModel() {
 
-    private val _state: MutableStateFlow<FunkScreenState> = MutableStateFlow(FunkScreenState.Loading)
-    val state: StateFlow<FunkScreenState>
-        get() = _state
+    private val _uiState = MutableStateFlow(FunkScreenState())
+    val uiState: StateFlow<FunkScreenState> = _uiState.asStateFlow()
 
-    private val funkAudios = mutableStateListOf<FunkAudio>()
+    init {
+        prepare()
+    }
 
     fun onAction(action: FunkScreenAction) {
         when (action) {
-            FunkScreenAction.LoadAudios -> prepare()
-            is FunkScreenAction.AudioClicked -> {
-                if (action.audio.isPlaying) {
-                    stop(action.audio.id)
-                } else {
-                    play(action.audio.id)
-                }
-            }
+            FunkScreenAction.LoadAudios -> {} //prepare()
+            is FunkScreenAction.AudioClicked -> onAudioClicked(action.audio)
         }
     }
 
     private fun prepare() {
         viewModelScope.launch {
-            funkAudios.clear()
-            funkAudios.addAll(preparePlayer())
-            _state.tryEmit(FunkScreenState.Loaded(funkAudios))
+            val audios = preparePlayer()
+            _uiState.update {
+                it.copy(audios = audios)
+            }
         }
     }
 
-    private fun play(audioId: Int) {
-        val audio = funkAudios.find { it.id == audioId }
-        audio?.let {
-            val audioIndex = funkAudios.indexOf(it)
-            playAudio(it) { shouldFinish ->
-                if (shouldFinish) {
-                    funkAudios.removeAt(audioIndex)
-                    funkAudios.add(audioIndex, it.copy(isPlaying = false))
+    private fun onAudioClicked(audio: FunkAudio) {
+        if (audio.isPlaying) {
+            stop(audio)
+        } else {
+            play(audio)
+        }
+
+        _uiState.update { currentState ->
+            currentState.copy(audios = updateList(currentState, audio.id, !audio.isPlaying))
+        }
+    }
+
+    private fun play(audio: FunkAudio) {
+        playAudio(audio) { shouldFinish ->
+            if (shouldFinish) {
+                _uiState.update { currentState ->
+                    currentState.copy(audios = updateList(currentState, audio.id, false))
                 }
             }
-            funkAudios.removeAt(audioIndex)
-            funkAudios.add(audioIndex, it.copy(isPlaying = true))
         }
     }
 
-    private fun stop(audioId: Int) {
-        val audio = funkAudios.find { it.id == audioId }
-        audio?.let {
-            val audioIndex = funkAudios.indexOf(it)
-            stopAudio(it)
-            funkAudios.removeAt(audioIndex)
-            funkAudios.add(audioIndex, it.copy(isPlaying = false))
+    private fun stop(audio: FunkAudio) {
+        stopAudio(audio)
+    }
+
+    private fun updateList(
+        currentState: FunkScreenState,
+        audioId: Int,
+        isPlaying: Boolean
+    ): List<FunkAudio> = currentState.audios.map {
+        if (it.id == audioId) {
+            it.copy(isPlaying = isPlaying)
+        } else {
+            it
         }
     }
 }

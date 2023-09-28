@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.forEach
 
 @Composable
 fun FunkScreen(viewModel: FunkViewModel) {

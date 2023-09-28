@@ -8,17 +8,20 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,19 +38,23 @@ import com.scarpim.funkme.ui.theme.voiceButtonColor
 fun FunkButton(
     modifier: Modifier = Modifier,
     audio: FunkAudio,
-    onClick: (Boolean) -> Unit
+    onClick: () -> Unit
 ) {
     val iconResource = getIconResource(audio)
     val color = getColorResource(audio)
 
-    Button(
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(backgroundColor = color),
-        onClick = {
-            onClick(audio.isPlaying)
-        }
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(color = color)
+            .clickable {
+                onClick()
+            },
     ) {
-        FunkButtonContent(iconResource = iconResource, isPlaying = audio.isPlaying)
+        FunkButtonContent(
+            iconResource = iconResource,
+            isPlaying = audio.isPlaying
+        )
     }
 }
 
@@ -57,6 +64,7 @@ fun FunkButtonContent(
     @DrawableRes iconResource: Int,
     isPlaying: Boolean
 ) {
+
     val infiniteTransition = rememberInfiniteTransition()
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -69,6 +77,7 @@ fun FunkButtonContent(
             repeatMode = RepeatMode.Reverse
         )
     )
+
     val boxModifier = if (isPlaying) {
         modifier.background(Color.White.copy(alpha = alpha))
     } else {
@@ -82,14 +91,17 @@ fun FunkButtonContent(
             Icon(
                 modifier = Modifier
                     .fillMaxSize()
-                    .align(Alignment.Center),
+                    .align(Alignment.Center)
+                    .padding(8.dp),
                 painter = painterResource(id = iconResource),
                 tint = Color.Unspecified,
                 contentDescription = null
             )
         } else {
             Icon(
-                modifier = Modifier.align(Alignment.BottomEnd),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(8.dp),
                 painter = painterResource(id = iconResource),
                 tint = Color.Unspecified,
                 contentDescription = null

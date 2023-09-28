@@ -43,11 +43,11 @@ fun FunkPad(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
             content = {
-                items(audios) { audio ->
+                items(audios, key = { it.id }) { audio ->
                     FunkButton(
                         modifier = buttonModifier,
                         audio = audio
-                    ) { isPlaying ->
+                    ) {
                         onClick(audio)
                     }
                 }

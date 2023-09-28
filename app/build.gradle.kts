@@ -1,6 +1,7 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -52,24 +53,24 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":funkplayer"))
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.compose.ui:ui:1.2.0-rc02")
-    implementation("androidx.compose.material:material:1.2.0-rc02")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-rc02")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.activity:activity-compose:1.3.1")
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.activity.compose)
 
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.17.0")
+    implementation(libs.google.accompanist.systemuicontroller)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation(libs.androidx.lifecycle.viewmodel)
 
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-compiler:2.38.1")
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0-rc02")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.0-rc02")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.0-rc02")
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.junit.ext)
+    androidTestImplementation(libs.test.espresso.core)
+    androidTestImplementation(libs.test.compose.junit)
+    debugImplementation(libs.test.compose.ui.tooling)
+    debugImplementation(libs.test.compose.ui.test.manifest)
 }

@@ -17,7 +17,7 @@ fun FunkScreen(viewModel: FunkViewModel) {
     val state by viewModel.uiState.collectAsState()
 
     if (state.isLoading) {
-        // TODO - Add some feedback for
+        // TODO - Add some feedback
     } else {
         FunkPad(
             modifier = Modifier.fillMaxSize(),

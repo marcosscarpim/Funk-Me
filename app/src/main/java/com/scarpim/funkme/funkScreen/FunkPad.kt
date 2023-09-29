@@ -13,8 +13,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.scarpim.funkme.domain.model.FunkAudio
@@ -26,6 +28,7 @@ private const val GRID_ROWS = 3
 fun FunkPad(
     modifier: Modifier = Modifier,
     audios: List<FunkAudio>,
+    spacingRight: Dp = 0.dp,
     onClick: (FunkAudio) -> Unit
 ) {
     CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
@@ -35,7 +38,7 @@ fun FunkPad(
             val space = 5.dp
             val rowCount = GRID_ROWS
             val columnCount = audios.size / rowCount + if (audios.size % rowCount > 0) 1 else 0
-            val gridWidth = maxWidth - padding.calculateLeftPadding(LayoutDirection.Ltr) - padding.calculateRightPadding(LayoutDirection.Ltr)
+            val gridWidth = maxWidth - spacingRight - padding.calculateLeftPadding(LayoutDirection.Ltr) - padding.calculateRightPadding(LayoutDirection.Ltr)
             val itemWidth = (gridWidth - space * (rowCount - 1)) / columnCount
 
             LazyHorizontalGrid(

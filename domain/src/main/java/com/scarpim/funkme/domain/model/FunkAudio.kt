@@ -16,7 +16,7 @@ package com.scarpim.funkme.domain.model
 data class FunkAudio(
     val id: Int,
     val type: FunkType,
-    val duration: Int,
+    val duration: Int = 0,
     var isPlaying: Boolean = false,
     val name: String = ""
 )

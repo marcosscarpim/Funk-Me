@@ -1,21 +1,21 @@
 [versions]
-hiltAndroidGradlePlugin = "2.44.2"
-ktx = "1.12.0"
-compose-bom = "2023.09.02"
-runtime-ktx = "2.6.2"
-compose-activity = "1.7.2"
+hiltAndroidGradlePlugin = "2.55"
+ktx = "1.15.0"
+compose-bom = "2025.01.01"
+runtime-ktx = "2.8.7"
+compose-activity = "1.10.0"
 accompanist = "0.17.0"
-lifecycle-viewmodel = "2.6.2"
+lifecycle-viewmodel = "2.8.7"
 hilt= "2.38.1"
 junit = "4.13.2"
-junit-ext = "1.1.5"
-espresso = "3.5.1"
-test-core-ktx = "1.5.0"
+junit-ext = "1.2.1"
+espresso = "3.6.1"
+test-core-ktx = "1.6.1"
 mockito-core = "5.5.0"
 mockito-kotlin = "3.2.0"
 mockk = "1.13.8"
 
-androidGradlePlugin = "8.1.2"
+androidGradlePlugin = "8.7.1"
 kotlinAndroidPlugin = "1.8.10"
 
 [libraries]
@@ -34,8 +34,8 @@ test-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test
 test-compose-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 test-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 
-google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version = "2.44.2" }
-google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version = "2.44.2" }
+google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version = "2.55" }
+google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version = "2.55" }
 
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
 
@@ -50,4 +50,4 @@ test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroidPlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.25" }

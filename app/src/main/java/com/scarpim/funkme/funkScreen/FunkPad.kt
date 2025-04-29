@@ -4,7 +4,6 @@
 
 package com.scarpim.funkme.funkScreen
 
-import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Arrangement
@@ -23,13 +22,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.scarpim.funkme.domain.model.FunkAudio
 import com.scarpim.funkme.domain.model.FunkType
+import com.scarpim.funkme.helper.isLandscape
 
 private const val GRID_ROWS_LANDSCAPE = 3
 private const val GRID_COLS_PORTRAIT = 3
@@ -58,7 +57,7 @@ private fun FunkPadLandscape(
     onClick: (FunkAudio) -> Unit
 ) {
     CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
-        BoxWithConstraints {
+        BoxWithConstraints(modifier = modifier) {
             val padding = PaddingValues(20.dp)
             val space = 5.dp
             val rowCount = GRID_ROWS_LANDSCAPE
@@ -69,7 +68,6 @@ private fun FunkPadLandscape(
             val itemWidth = (gridWidth - space * (rowCount - 1)) / columnCount
 
             LazyHorizontalGrid(
-                modifier = modifier,
                 rows = GridCells.Fixed(GRID_ROWS_LANDSCAPE),
                 contentPadding = PaddingValues(5.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -100,7 +98,7 @@ private fun FunkPadPortrait(
     onClick: (FunkAudio) -> Unit
 ) {
     CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
-        BoxWithConstraints {
+        BoxWithConstraints(modifier = modifier) {
             val padding = PaddingValues(20.dp)
             val space = 5.dp
             val columnCount = GRID_COLS_PORTRAIT
@@ -111,7 +109,6 @@ private fun FunkPadPortrait(
             val itemHeight = (gridHeight - space * (columnCount - 1)) / rowCount
 
             LazyVerticalGrid(
-                modifier = modifier,
                 columns = GridCells.Fixed(GRID_COLS_PORTRAIT),
                 contentPadding = PaddingValues(5.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -132,10 +129,6 @@ private fun FunkPadPortrait(
         }
     }
 }
-
-@Composable
-private fun isLandscape(): Boolean =
-    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @Preview(showBackground = true)
 @Composable

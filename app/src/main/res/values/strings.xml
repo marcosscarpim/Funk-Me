@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Funk Me</string>
+
+    <string name="record_button_start_description">Start recording</string>
+    <string name="record_button_stop_description">Stop recording</string>
 </resources>

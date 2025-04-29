@@ -17,3 +17,4 @@ rootProject.name = "Funk Me"
 include(":app")
 include (":domain")
 include (":funkplayer")
+include(":recorder")

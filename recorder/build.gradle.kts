@@ -29,7 +29,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    namespace = "com.scarpim.funkme.funkplayer"
+    namespace = "com.scarpim.funkme.recorder"
 }
 
 dependencies {

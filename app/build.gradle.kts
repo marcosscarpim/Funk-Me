@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.scarpim.funkme"
         targetSdk = 35
-        minSdk = 26
+        minSdk = 29
         versionCode = 1
         versionName = "1.0"
 
@@ -52,17 +52,20 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":funkplayer"))
+    implementation(project(":recorder"))
 
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.icons)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.google.accompanist.systemuicontroller)
+    implementation(libs.google.accompanist.permissions)
 
     implementation(libs.androidx.lifecycle.viewmodel)
 

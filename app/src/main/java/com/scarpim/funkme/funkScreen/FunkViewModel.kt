@@ -7,6 +7,7 @@ package com.scarpim.funkme.funkScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scarpim.funkme.domain.model.FunkAudio
+import com.scarpim.funkme.domain.usecase.OnRecording
 import com.scarpim.funkme.domain.usecase.PlayAudio
 import com.scarpim.funkme.domain.usecase.PreparePlayer
 import com.scarpim.funkme.domain.usecase.StopAudio
@@ -37,7 +38,8 @@ data class FunkScreenState(
 class FunkViewModel @Inject constructor(
     private val preparePlayer: PreparePlayer,
     private val playAudio: PlayAudio,
-    private val stopAudio: StopAudio
+    private val stopAudio: StopAudio,
+    private val onRecording: OnRecording,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FunkScreenState())
@@ -51,6 +53,7 @@ class FunkViewModel @Inject constructor(
         when (action) {
             FunkScreenAction.LoadAudios -> {} //prepare()
             is FunkScreenAction.AudioClicked -> onAudioClicked(action.audio)
+            is FunkScreenAction.OnRecordClicked -> onRecordClicked(action)
         }
     }
 
@@ -99,5 +102,9 @@ class FunkViewModel @Inject constructor(
         } else {
             it
         }
+    }
+
+    private fun onRecordClicked(action: FunkScreenAction.OnRecordClicked) {
+        onRecording(action.recording, action.mediaProjectionIntent)
     }
 }

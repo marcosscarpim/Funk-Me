@@ -5,7 +5,6 @@
 package com.scarpim.funkme.funkScreen
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mscarpim.funkme.recorder.AudioCaptureService
 import com.scarpim.funkme.domain.model.FunkAudio
 import com.scarpim.funkme.helper.isLandscape
 
@@ -28,21 +25,16 @@ import com.scarpim.funkme.helper.isLandscape
 fun FunkScreen(viewModel: FunkViewModel) {
     val state by viewModel.uiState.collectAsState()
     val isLandscape = isLandscape()
-    var isRecording: Boolean by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
-    // TODO move this to proper place
+    var isRecording: Boolean by remember { mutableStateOf(false) }
+
     val onRecordClicked: (Intent?) -> Unit = { mediaProjectionIntent ->
-        val intent = Intent(context, AudioCaptureService::class.java)
-        if (isRecording) {
-            isRecording = false
-            context.stopService(intent)
-        } else {
-            isRecording = true
-            intent.putExtra("resultCode", RESULT_OK)
-            AudioCaptureService.mediaProjectionData = mediaProjectionIntent
-            context.startForegroundService(intent)
-        }
+        isRecording = !isRecording
+        viewModel.onAction(FunkScreenAction.OnRecordClicked(isRecording, mediaProjectionIntent))
+    }
+
+    val onAudioClicked: (FunkAudio) -> Unit = { audio ->
+        viewModel.onAction(FunkScreenAction.AudioClicked(audio))
     }
 
     if (state.isLoading) {
@@ -53,18 +45,14 @@ fun FunkScreen(viewModel: FunkViewModel) {
                 state = state,
                 isRecording = isRecording,
                 onRecordClicked = onRecordClicked,
-                onAudioClicked = { audio ->
-                    viewModel.onAction(FunkScreenAction.AudioClicked(audio))
-                }
+                onAudioClicked = onAudioClicked,
             )
         } else {
             FunkScreenPortrait(
                 state = state,
                 isRecording = isRecording,
                 onRecordClicked = onRecordClicked,
-                onAudioClicked = { audio ->
-                    viewModel.onAction(FunkScreenAction.AudioClicked(audio))
-                }
+                onAudioClicked = onAudioClicked,
             )
         }
     }

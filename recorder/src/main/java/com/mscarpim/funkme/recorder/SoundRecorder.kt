@@ -36,12 +36,12 @@ class SoundRecorder @Inject constructor(
         val audioFormat = AudioFormat.Builder()
             .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
             .setSampleRate(44100)
-            .setChannelMask(AudioFormat.CHANNEL_IN_STEREO)
+            .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
             .build()
 
         val bufferSize = AudioRecord.getMinBufferSize(
             44100,
-            AudioFormat.CHANNEL_IN_STEREO,
+            AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT
         )
 
@@ -84,9 +84,6 @@ class SoundRecorder @Inject constructor(
     }
 
     private fun convertPcmToWav(pcmFile: File, wavFile: File) {
-        // Use LAME or an external library to do this conversion.
-        // Below is a placeholder. You'll need an actual MP3 encoder.
-        // Example library: Lame4Android, FFMPEG, etc.
         rawToWave(pcmFile, wavFile)
     }
 

@@ -6,14 +6,18 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import java.io.File
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AudioCaptureService : Service() {
+
+    @Inject
+    lateinit var fileController: FileController
 
     private var recorder: SoundRecorder? = null
 
@@ -34,11 +38,11 @@ class AudioCaptureService : Service() {
         val resultCode = intent?.getIntExtra("resultCode", Activity.RESULT_CANCELED) ?: return START_NOT_STICKY
         val data = mediaProjectionData ?: return START_NOT_STICKY
 
-        val mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        val mediaProjectionManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
 
         recorder = SoundRecorder(this, mediaProjection)
-        val outputFile = File(externalCacheDir?.absolutePath, "recorded_output.wav")
+        val outputFile = fileController.createFileWithDateName()
         recorder?.startRecording(outputFile)
 
         return START_NOT_STICKY

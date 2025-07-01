@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.navigation)
 
     implementation(libs.google.accompanist.systemuicontroller)
     implementation(libs.google.accompanist.permissions)

@@ -1,13 +1,13 @@
 [versions]
 hiltAndroidGradlePlugin = "2.55"
-ktx = "1.15.0"
-compose-bom = "2025.01.01"
-runtime-ktx = "2.8.7"
-compose-activity = "1.10.0"
+ktx = "1.16.0"
+compose-bom = "2025.06.01"
+runtime-ktx = "2.9.1"
+compose-activity = "1.10.1"
 accompanist-systemui = "0.36.0"
 accompanist-permissions = "0.37.2"
-lifecycle-viewmodel = "2.8.7"
-hilt= "2.38.1"
+lifecycle-viewmodel = "2.9.1"
+hilt= "2.55"
 junit = "4.13.2"
 junit-ext = "1.2.1"
 espresso = "3.6.1"
@@ -15,6 +15,7 @@ test-core-ktx = "1.6.1"
 mockito-core = "5.5.0"
 mockito-kotlin = "3.2.0"
 mockk = "1.13.8"
+compose-navigation = "2.9.0"
 
 androidGradlePlugin = "8.7.1"
 kotlinAndroidPlugin = "1.8.10"
@@ -34,14 +35,13 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-material = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 test-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 test-compose-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 test-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 
-
-
-google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version = "2.55" }
-google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version = "2.55" }
+google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+google-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
 

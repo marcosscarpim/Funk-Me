@@ -50,7 +50,12 @@ class MainActivity : ComponentActivity() {
                             startDestination = Screen.FunkScreen.route,
                         ) {
                             composable(Screen.FunkScreen.route) {
-                                FunkScreen(viewModel = viewModel)
+                                FunkScreen(
+                                    viewModel = viewModel,
+                                    navigateToFilesScreen = {
+                                        navController.navigate(Screen.FileScreen.route)
+                                    }
+                                )
                             }
 
                             composable(Screen.FileScreen.route) {

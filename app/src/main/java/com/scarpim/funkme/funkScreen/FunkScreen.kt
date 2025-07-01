@@ -6,8 +6,11 @@ package com.scarpim.funkme.funkScreen
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,7 +25,10 @@ import com.scarpim.funkme.domain.model.FunkAudio
 import com.scarpim.funkme.helper.isLandscape
 
 @Composable
-fun FunkScreen(viewModel: FunkViewModel) {
+fun FunkScreen(
+    viewModel: FunkViewModel,
+    navigateToFilesScreen: () -> Unit,
+) {
     val state by viewModel.uiState.collectAsState()
     val isLandscape = isLandscape()
 
@@ -46,6 +52,7 @@ fun FunkScreen(viewModel: FunkViewModel) {
                 isRecording = isRecording,
                 onRecordClicked = onRecordClicked,
                 onAudioClicked = onAudioClicked,
+                onFilesClicked = navigateToFilesScreen,
             )
         } else {
             FunkScreenPortrait(
@@ -53,6 +60,7 @@ fun FunkScreen(viewModel: FunkViewModel) {
                 isRecording = isRecording,
                 onRecordClicked = onRecordClicked,
                 onAudioClicked = onAudioClicked,
+                onFilesClicked = navigateToFilesScreen,
             )
         }
     }
@@ -65,6 +73,7 @@ fun FunkScreenLandscape(
     isRecording: Boolean,
     onRecordClicked: (Intent?) -> Unit,
     onAudioClicked: (FunkAudio) -> Unit,
+    onFilesClicked: () -> Unit,
 ) {
     Row {
         FunkPad(
@@ -72,13 +81,19 @@ fun FunkScreenLandscape(
             audios = state.audios,
             onClick = onAudioClicked,
         )
-        RecordButton(
+        Column(
             modifier = Modifier
-                .align(Alignment.CenterVertically)
+                .fillMaxHeight()
                 .padding(start = 10.dp, end = 20.dp),
-            isRecording = isRecording,
-            onButtonClicked = onRecordClicked,
-        )
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            RecordButton(
+                isRecording = isRecording,
+                onButtonClicked = onRecordClicked,
+            )
+            FilesButton(onClick = onFilesClicked)
+        }
     }
 }
 
@@ -89,6 +104,7 @@ fun FunkScreenPortrait(
     isRecording: Boolean,
     onRecordClicked: (Intent?) -> Unit,
     onAudioClicked: (FunkAudio) -> Unit,
+    onFilesClicked: () -> Unit,
 ) {
     Column {
         FunkPad(
@@ -96,12 +112,18 @@ fun FunkScreenPortrait(
             audios = state.audios,
             onClick = onAudioClicked,
         )
-        RecordButton(
+        Row(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 20.dp),
-            isRecording = isRecording,
-            onButtonClicked = onRecordClicked,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            RecordButton(
+                isRecording = isRecording,
+                onButtonClicked = onRecordClicked,
+            )
+            FilesButton(onClick = onFilesClicked)
+        }
     }
 }

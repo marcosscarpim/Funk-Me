@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.scarpim.funkme.R
 import com.scarpim.funkme.permission.MediaProjectionPermissionHandler
@@ -27,7 +28,7 @@ import com.scarpim.funkme.permission.MediaProjectionPermissionHandler
 // TODO move permission logic somewhere else
 @Composable
 fun RecordButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     isRecording: Boolean,
     onButtonClicked: (Intent?) -> Unit,
 ) {
@@ -46,11 +47,10 @@ fun RecordButton(
         }
     }
 
-    val context = LocalContext.current
     val buttonDescription = if (isRecording) {
-        context.getText(R.string.record_button_stop_description)
+        stringResource(R.string.record_button_stop_description)
     } else {
-        context.getText(R.string.record_button_start_description)
+        stringResource(R.string.record_button_start_description)
     }
 
     IconButton(

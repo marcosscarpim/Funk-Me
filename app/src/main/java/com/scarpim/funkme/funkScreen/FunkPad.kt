@@ -4,8 +4,10 @@
 
 package com.scarpim.funkme.funkScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -48,6 +50,7 @@ fun FunkPad(
     }
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FunkPadLandscape(
@@ -56,7 +59,7 @@ private fun FunkPadLandscape(
     spacingRight: Dp = 0.dp,
     onClick: (FunkAudio) -> Unit
 ) {
-    CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
         BoxWithConstraints(modifier = modifier) {
             val padding = PaddingValues(20.dp)
             val space = 5.dp
@@ -97,7 +100,7 @@ private fun FunkPadPortrait(
     spacingBottom: Dp = 0.dp,
     onClick: (FunkAudio) -> Unit
 ) {
-    CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+    CompositionLocalProvider(LocalOverscrollFactory provides null) {
         BoxWithConstraints(modifier = modifier) {
             val padding = PaddingValues(20.dp)
             val space = 5.dp

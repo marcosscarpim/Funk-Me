@@ -24,7 +24,7 @@ class RecorderProviderImpl @Inject constructor(
                     val durationStr =
                         retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                     val duration = durationStr?.toLongOrNull() ?: 0L
-                    recordingList.add(AudioRecording(file.name, duration))
+                    recordingList.add(AudioRecording(file.name, duration, file))
                 } catch (e: Exception) {
                     // TODO provide feedback
                 }

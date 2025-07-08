@@ -32,10 +32,6 @@ fun FunkScreen(
     viewModel: FunkViewModel = hiltViewModel(),
     navigateToFilesScreen: () -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.onAction(FunkScreenAction.LoadAudios)
-    }
-
     val state by viewModel.uiState.collectAsState()
     val isLandscape = isLandscape()
 

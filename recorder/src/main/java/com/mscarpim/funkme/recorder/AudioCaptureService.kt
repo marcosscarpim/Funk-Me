@@ -7,6 +7,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
 import android.media.projection.MediaProjectionManager
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -33,7 +34,11 @@ class AudioCaptureService : Service() {
 
     @SuppressLint("MissingPermission")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
+        startForeground(
+            NOTIFICATION_ID,
+            createNotification(),
+            FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION // needed in documentation
+        )
 
         val resultCode = intent?.getIntExtra("resultCode", Activity.RESULT_CANCELED) ?: return START_NOT_STICKY
         val data = mediaProjectionData ?: return START_NOT_STICKY

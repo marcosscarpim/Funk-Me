@@ -22,7 +22,7 @@ fun FilesButton(
     IconButton(
         modifier = modifier.size(60.dp),
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.primary
         ),
         onClick = onClick,
     ) {

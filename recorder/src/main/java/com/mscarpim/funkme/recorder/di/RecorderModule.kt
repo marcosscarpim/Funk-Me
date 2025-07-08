@@ -1,7 +1,9 @@
 package com.mscarpim.funkme.recorder.di
 
 import com.mscarpim.funkme.recorder.AudioRecorderImpl
+import com.mscarpim.funkme.recorder.RecorderProviderImpl
 import com.scarpim.funkme.domain.recorder.AudioRecorder
+import com.scarpim.funkme.domain.recorder.RecorderProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,4 +18,9 @@ abstract class RecorderModule {
     abstract fun bindAudioRecorder(
         audioRecorderImpl: AudioRecorderImpl
     ): AudioRecorder
+
+    @Binds
+    abstract fun bindRecordProvider(
+        recordProviderImpl: RecorderProviderImpl
+    ): RecorderProvider
 }

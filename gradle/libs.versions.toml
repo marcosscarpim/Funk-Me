@@ -7,7 +7,8 @@ compose-activity = "1.10.1"
 accompanist-systemui = "0.36.0"
 accompanist-permissions = "0.37.2"
 lifecycle-viewmodel = "2.9.1"
-hilt= "2.55"
+hilt = "2.55"
+hilt-navigation = "1.2.0"
 junit = "4.13.2"
 junit-ext = "1.2.1"
 espresso = "3.6.1"
@@ -36,6 +37,7 @@ androidx-compose-material = { group = "androidx.compose.material3", name = "mate
 androidx-compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 test-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 test-compose-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 test-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }

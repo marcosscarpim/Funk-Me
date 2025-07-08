@@ -3,6 +3,7 @@ package com.mscarpim.funkme.recorder
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import com.scarpim.funkme.domain.recorder.AudioRecorder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

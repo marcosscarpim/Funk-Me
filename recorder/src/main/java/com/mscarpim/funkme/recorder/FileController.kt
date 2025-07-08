@@ -20,6 +20,6 @@ class FileController @Inject constructor(@ApplicationContext private val context
         return File(context.externalCacheDir?.absolutePath, "record-$timeStamp.wav")
     }
 
-    fun getFilesSaved(): List<String> =
-        context.externalCacheDir?.listFiles()?.map { it.name } ?: emptyList()
+    fun getFilesSaved(): List<File> =
+        context.externalCacheDir?.listFiles()?.toList() ?: emptyList()
 }

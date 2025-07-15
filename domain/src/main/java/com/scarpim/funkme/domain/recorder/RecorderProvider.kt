@@ -9,5 +9,13 @@ interface RecorderProvider {
 
     fun getRecordings(): List<AudioRecording>
 
-    fun playRecording(recording: AudioRecording)
+    fun play(recording: AudioRecording)
+
+    fun pause()
+
+    fun stop()
+
+    fun isPlaying(): Boolean
+
+    fun setOnCompletionListener(listener: () -> Unit)
 }

@@ -1,16 +1,19 @@
 package com.mscarpim.funkme.recorder
 
-import android.content.Context
 import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
 import com.scarpim.funkme.domain.model.AudioRecording
 import com.scarpim.funkme.domain.recorder.RecorderProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RecorderProviderImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val fileController: FileController,
 ) : RecorderProvider {
+
+    private var mediaPlayer: MediaPlayer? = null
+    private var onCompletionListener: (() -> Unit)? = null
 
     override fun getRecordings(): List<AudioRecording> {
         val retriever = MediaMetadataRetriever()
@@ -34,8 +37,32 @@ class RecorderProviderImpl @Inject constructor(
         return recordingList.toList()
     }
 
-    override fun playRecording(recording: AudioRecording) {
-        // TODO implement this
+    override fun play(recording: AudioRecording) {
+        stop() // Stop any current playback
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(recording.file.absolutePath)
+            prepare()
+            start()
+            setOnCompletionListener {
+                onCompletionListener?.invoke()
+            }
+        }
+    }
+
+    override fun pause() {
+        mediaPlayer?.pause()
+    }
+
+    override fun stop() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun isPlaying(): Boolean = mediaPlayer?.isPlaying == true
+
+    override fun setOnCompletionListener(listener: () -> Unit) {
+        onCompletionListener = listener
     }
 
     companion object {

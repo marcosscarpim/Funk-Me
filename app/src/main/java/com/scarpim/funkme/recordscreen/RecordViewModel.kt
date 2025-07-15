@@ -1,6 +1,5 @@
 package com.scarpim.funkme.recordscreen
 
-import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import com.scarpim.funkme.domain.model.AudioRecording
 import com.scarpim.funkme.domain.recorder.RecorderProvider
@@ -18,10 +17,8 @@ data class RecordScreenState(
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-    recorderProvider: RecorderProvider,
+    private val recorderProvider: RecorderProvider,
 ): ViewModel() {
-
-    private var mediaPlayer: MediaPlayer? = null
 
     private val _uiState = MutableStateFlow(RecordScreenState())
     val uiState: StateFlow<RecordScreenState> = _uiState.asStateFlow()
@@ -32,46 +29,20 @@ class RecordViewModel @Inject constructor(
     }
 
     fun onPlayClick(recording: AudioRecording) {
-        val current = _uiState.value
-
-        if (current.currentlyPlaying == recording.name) {
-            stopPlayback()
+        if (_uiState.value.currentlyPlaying == recording.name && recorderProvider.isPlaying()) {
+            recorderProvider.stop()
+            _uiState.value = _uiState.value.copy(currentlyPlaying = null)
         } else {
-            startPlayback(recording)
-        }
-    }
-
-    private fun startPlayback(recording: AudioRecording) {
-        stopPlayback() // Stop any current playing
-
-        mediaPlayer = MediaPlayer().apply {
-            setDataSource(recording.file.absolutePath)
-            prepare()
-            start()
-            setOnCompletionListener {
-                stopPlayback()
+            recorderProvider.play(recording)
+            recorderProvider.setOnCompletionListener {
+                _uiState.value = _uiState.value.copy(currentlyPlaying = null)
             }
+            _uiState.value = _uiState.value.copy(currentlyPlaying = recording.name)
         }
-
-        _uiState.value = _uiState.value.copy(
-            currentlyPlaying = recording.name,
-            isPlaying = true
-        )
-    }
-
-    private fun stopPlayback() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-
-        _uiState.value = _uiState.value.copy(
-            currentlyPlaying = null,
-            isPlaying = false
-        )
     }
 
     override fun onCleared() {
         super.onCleared()
-        stopPlayback()
+        recorderProvider.stop()
     }
 }

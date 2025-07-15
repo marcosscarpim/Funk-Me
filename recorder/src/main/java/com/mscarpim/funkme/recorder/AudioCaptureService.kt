@@ -20,6 +20,9 @@ class AudioCaptureService : Service() {
     @Inject
     lateinit var fileController: FileController
 
+    @Inject
+    lateinit var audioRecorder: AudioRecorderImpl
+
     private var recorder: SoundRecorder? = null
 
     override fun onCreate() {
@@ -46,7 +49,13 @@ class AudioCaptureService : Service() {
         val mediaProjectionManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
 
-        recorder = SoundRecorder(this, mediaProjection)
+        recorder = SoundRecorder(
+            context = this,
+            mediaProjection = mediaProjection,
+            onRecordCompleted = { fileName ->
+                audioRecorder.notifyRecordingStopped(fileName)
+            }
+        )
         val outputFile = fileController.createFileWithDateName()
         recorder?.startRecording(outputFile)
 

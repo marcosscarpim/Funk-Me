@@ -17,4 +17,6 @@ sealed class FunkScreenAction {
         val recording: Boolean,
         val mediaProjectionIntent: Intent?,
     ): FunkScreenAction()
+
+    data object ClearRecordingResult: FunkScreenAction()
 }

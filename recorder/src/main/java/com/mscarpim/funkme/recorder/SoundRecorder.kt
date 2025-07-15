@@ -22,7 +22,8 @@ import javax.inject.Inject
 
 class SoundRecorder @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val mediaProjection: MediaProjection
+    private val mediaProjection: MediaProjection,
+    private val onRecordCompleted: (String) -> Unit,
 ) {
     private var isRecording = false
     private lateinit var recordingThread: Thread
@@ -72,6 +73,8 @@ class SoundRecorder @Inject constructor(
 
             // Convert to MP3 after recording
             convertPcmToWav(pcmFile, outputFile)
+
+            onRecordCompleted(outputFile.name)
 
             pcmFile.delete()
         }

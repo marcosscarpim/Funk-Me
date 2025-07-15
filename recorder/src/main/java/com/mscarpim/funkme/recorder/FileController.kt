@@ -17,9 +17,23 @@ class FileController @Inject constructor(@ApplicationContext private val context
 
     fun createFileWithDateName(): File {
         val timeStamp = SimpleDateFormat("HHmmss_yyyyMMdd", Locale.getDefault()).format(Date())
-        return File(context.externalCacheDir?.absolutePath, "record-$timeStamp.wav")
+
+        // avoid creating a file that already exist in dir
+        var fullName = "record-$timeStamp.wav"
+        var i = 1
+        while (hasFileInDir(fullName)) {
+            fullName = "record-$timeStamp+i.wav"
+            i++
+        }
+
+        return File(context.externalCacheDir?.absolutePath, fullName)
     }
 
     fun getFilesSaved(): List<File> =
         context.externalCacheDir?.listFiles()?.toList() ?: emptyList()
+
+    private fun hasFileInDir(fileName: String): Boolean {
+        val file = File(context.externalCacheDir, fileName)
+        return file.exists()
+    }
 }

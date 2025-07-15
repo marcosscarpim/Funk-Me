@@ -6,6 +6,7 @@ package com.scarpim.funkme.funkScreen
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.scarpim.funkme.domain.model.FunkAudio
+import com.scarpim.funkme.domain.model.RecordingResult
 import com.scarpim.funkme.helper.isLandscape
 
 @Composable
@@ -44,6 +47,19 @@ fun FunkScreen(
 
     val onAudioClicked: (FunkAudio) -> Unit = { audio ->
         viewModel.onAction(FunkScreenAction.AudioClicked(audio))
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(state.recordingResult) {
+        val result = state.recordingResult
+        if (result is RecordingResult.Stopped) {
+            Toast.makeText(
+                context,
+                "Recording saved as: ${result.fileName}",
+                Toast.LENGTH_LONG
+            ).show()
+            viewModel.onAction(FunkScreenAction.ClearRecordingResult)
+        }
     }
 
     if (state.isLoading) {

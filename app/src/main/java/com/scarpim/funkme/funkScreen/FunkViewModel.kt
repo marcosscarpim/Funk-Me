@@ -7,6 +7,8 @@ package com.scarpim.funkme.funkScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scarpim.funkme.domain.model.FunkAudio
+import com.scarpim.funkme.domain.model.RecordingResult
+import com.scarpim.funkme.domain.recorder.AudioRecorder
 import com.scarpim.funkme.domain.usecase.OnRecording
 import com.scarpim.funkme.domain.usecase.PlayAudio
 import com.scarpim.funkme.domain.usecase.PreparePlayer
@@ -31,7 +33,8 @@ import kotlin.coroutines.CoroutineContext
 
 data class FunkScreenState(
     val isLoading: Boolean = false,
-    val audios: List<FunkAudio> = emptyList()
+    val audios: List<FunkAudio> = emptyList(),
+    val recordingResult: RecordingResult? = null,
 )
 
 @HiltViewModel
@@ -40,6 +43,7 @@ class FunkViewModel @Inject constructor(
     private val playAudio: PlayAudio,
     private val stopAudio: StopAudio,
     private val onRecording: OnRecording,
+    private val audioRecorder: AudioRecorder,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FunkScreenState())
@@ -47,6 +51,11 @@ class FunkViewModel @Inject constructor(
 
     init {
         prepare()
+        viewModelScope.launch {
+            audioRecorder.events.collect { result ->
+                _uiState.update { it.copy(recordingResult = result) }
+            }
+        }
     }
 
     fun onAction(action: FunkScreenAction) {
@@ -54,6 +63,7 @@ class FunkViewModel @Inject constructor(
             FunkScreenAction.LoadAudios -> {} //prepare()
             is FunkScreenAction.AudioClicked -> onAudioClicked(action.audio)
             is FunkScreenAction.OnRecordClicked -> onRecordClicked(action)
+            FunkScreenAction.ClearRecordingResult -> clearRecordingFeedback()
         }
     }
 
@@ -106,5 +116,9 @@ class FunkViewModel @Inject constructor(
 
     private fun onRecordClicked(action: FunkScreenAction.OnRecordClicked) {
         onRecording(action.recording, action.mediaProjectionIntent)
+    }
+
+    private fun clearRecordingFeedback() {
+        _uiState.update { it.copy(recordingResult = null) }
     }
 }

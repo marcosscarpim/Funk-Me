@@ -3,6 +3,7 @@ package com.scarpim.funkme.recordscreen
 import androidx.lifecycle.ViewModel
 import com.scarpim.funkme.domain.model.AudioRecording
 import com.scarpim.funkme.domain.recorder.RecorderProvider
+import com.scarpim.funkme.domain.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +30,7 @@ class RecordViewModel @Inject constructor(
     }
 
     fun onPlayClick(recording: AudioRecording) {
+        logD { "onPlayClick - $recording, isPlaying = ${_uiState.value.currentlyPlaying}" }
         if (_uiState.value.currentlyPlaying == recording.name && recorderProvider.isPlaying()) {
             recorderProvider.stop()
             _uiState.value = _uiState.value.copy(currentlyPlaying = null)

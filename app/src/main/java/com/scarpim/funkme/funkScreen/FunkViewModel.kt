@@ -13,6 +13,7 @@ import com.scarpim.funkme.domain.usecase.OnRecording
 import com.scarpim.funkme.domain.usecase.PlayAudio
 import com.scarpim.funkme.domain.usecase.PreparePlayer
 import com.scarpim.funkme.domain.usecase.StopAudio
+import com.scarpim.funkme.domain.util.logD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,7 @@ class FunkViewModel @Inject constructor(
     }
 
     fun onAction(action: FunkScreenAction) {
+        logD { "onAction - $action" }
         when (action) {
             FunkScreenAction.LoadAudios -> {} //prepare()
             is FunkScreenAction.AudioClicked -> onAudioClicked(action.audio)

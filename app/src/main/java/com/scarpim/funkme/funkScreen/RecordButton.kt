@@ -58,6 +58,7 @@ fun RecordButton(
         colors = IconButtonDefaults.iconButtonColors(containerColor = buttonColor),
         onClick = {
             if (intentData != null) {
+                shouldAskPermission = false
                 onButtonClicked(intentData)
             } else {
                 shouldAskPermission = true

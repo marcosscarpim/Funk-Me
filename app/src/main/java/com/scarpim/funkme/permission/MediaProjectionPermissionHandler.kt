@@ -8,11 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 
 /**
@@ -27,9 +23,6 @@ fun MediaProjectionPermissionHandler(
     askPermission: Boolean = true,
     onResult: (Boolean, Intent?) -> Unit,
 ) {
-    var resultCode: Int? by rememberSaveable { mutableStateOf(null) }
-    var intentData: Intent? by rememberSaveable { mutableStateOf(null) }
-
     val context = LocalContext.current
     val mediaProjectionManager = remember {
         context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
@@ -39,20 +32,15 @@ fun MediaProjectionPermissionHandler(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            resultCode = result.resultCode
-            intentData = result.data ?: return@rememberLauncherForActivityResult
+            val intentData = result.data ?: return@rememberLauncherForActivityResult
             onResult(true, intentData)
         }
     }
 
     LaunchedEffect(askPermission) {
         if (askPermission) {
-            if (resultCode == RESULT_OK && intentData != null) {
-                onResult(true, intentData)
-            } else {
-                val intent = mediaProjectionManager.createScreenCaptureIntent()
-                activityResultLauncher.launch(intent)
-            }
+            val intent = mediaProjectionManager.createScreenCaptureIntent()
+            activityResultLauncher.launch(intent)
         }
     }
 }
